@@ -26,3 +26,9 @@ jobs:
 
       - name: Run basic build
         run: python app.py
+      
+      - name: Run unit tests
+        run: |
+          pip install pytest
+          pytest -v
+
