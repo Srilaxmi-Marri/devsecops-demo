@@ -45,3 +45,13 @@ jobs:
       
       - name: Use secret
         run: echo "Secret is ${{ secrets.MY_SECRET }}"
+
+  docker-build:
+    runs-on: ubuntu-latest
+    needs: build-test   # runs after tests succeed
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t hello-devsecops:${{ github.sha }} .
