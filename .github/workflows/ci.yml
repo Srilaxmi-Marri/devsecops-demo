@@ -67,8 +67,11 @@ jobs:
 
       # 🔍 Trivy Security Scan
       - name: Scan image with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ghcr.io/${{ github.repository }}/hello-devsecops:${{ github.sha }}
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
+        run: |
+          REPO_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          IMAGE=ghcr.io/$REPO_LC/hello-devsecops:${{ github.sha }}
+          docker pull $IMAGE   # make sure image is available
+          trivy image --severity CRITICAL,HIGH --vuln-type os,library $IMAGE
+
+
+      
