@@ -31,9 +31,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
- 
-      - name: Run basic build
-        run: python app.py
+
+      # ✅ FIXED: just checks Flask can be imported instead of running the server
+      - name: Run basic build (import check)
+        run: python -c "import app; print('App imported successfully ✅')"
 
       - name: Run unit tests
         run: |
