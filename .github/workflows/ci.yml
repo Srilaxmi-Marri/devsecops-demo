@@ -32,7 +32,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # ✅ FIXED: just checks Flask can be imported instead of running the server
+      # ✅ Just import check instead of running Flask server
       - name: Run basic build (import check)
         run: python -c "import app; print('App imported successfully ✅')"
 
@@ -65,13 +65,13 @@ jobs:
           docker push $IMAGE:${{ github.sha }}
           docker push $IMAGE:latest
 
-      # 🔍 Trivy Security Scan
+      # ✅ Install Trivy
+      - name: Install Trivy
+        uses: aquasecurity/setup-trivy@v0.2.0
+
+      # 🔍 Scan image with Trivy
       - name: Scan image with Trivy
         run: |
           REPO_LC=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
           IMAGE=ghcr.io/$REPO_LC/hello-devsecops:${{ github.sha }}
-          docker pull $IMAGE   # make sure image is available
           trivy image --severity CRITICAL,HIGH --vuln-type os,library $IMAGE
-
-
-      
